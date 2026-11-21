@@ -3,7 +3,7 @@
 
 Predicts dengue outbreak risk (Low / Medium / High / Critical) for each ward, 2 to 4 weeks ahead, from weather and ward conditions. It gives public health officers an early-warning window before outbreaks peak.
 
-**Team:** Ritu Das (Member 1), <Member 2 jerin sadea eva> (Member 2)
+**Team:** Ritu Das (Member 1), jerin sadea eva (Member 2)
 
 ## Quick start (about 3 minutes)
 
