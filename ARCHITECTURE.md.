@@ -19,3 +19,24 @@ flowchart LR
 - Raw data is loaded once and sorted by ward and date.
 - All lag features are computed per ward, so one ward's weather never leaks into another.
 - Training is offline (`train.py`). The dashboard only loads the saved model.
+
+
+
+## 3. Chronological validation split
+| Set | Period | Use |
+|---|---|---|
+| Train | 2016 to 2022 | fit the model |
+| Validation | 2023 | early stopping and risk-tier cut-offs |
+| Test | 2024 to 2025 | final check, run once |
+
+The target for week t looks 4 weeks ahead (cases in t+2 to t+4). So the last 4 weeks of train and validation are **purged**: a row is kept only if its whole target window ends inside its own period. This stops future cases leaking into earlier sets. Features use only data from week t or earlier. Random splitting is not used, because it would let the model see the future.
+
+## 4. Model choice
+- **LightGBM with Poisson objective.** Case counts are non-negative, with many zeros, so Poisson fits better than plain regression.
+- It is fast, small, and handles mixed features without scaling.
+- Compared with deep learning: the dataset has about 31,000 rows, so a deep model adds cost with little benefit.
+- **Drivers:** LightGBM per-prediction contributions, grouped into Recent rainfall, Temperature, Humidity, Season, Ward vulnerability. They show which factors the model used. They are **not proof of cause**.
+
+## 5. Risk tiers
+- True tiers use training-target percentiles (70, 90, 97): Low, Medium, High, Critical.
+- Predicted-case cut-offs (6.62, 21.17, 34.49) were tuned on **validation only**, never on test data.
