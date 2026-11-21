@@ -6,14 +6,15 @@ Predict dengue risk (Low / Medium / High / Critical) for each ward, 2 to 4 weeks
 ## 2. Data flow
 
 ```mermaid
+```mermaid
 flowchart LR
-    A[Excel dataset: 60 wards, 522 weeks] --> B[features.py: rain lags 1-6 wk, rolling sums, temp and humidity lags, season]
-    B --> C[Target: cases in weeks t+2 to t+4]
-    C --> D[Purged chronological split]
-    D --> E[train.py: LightGBM Poisson model]
-    E --> F[models/model.joblib + thresholds.json]
-    F --> G[predict.py: tier + driver groups]
-    G --> H[app.py: Streamlit dashboard]
+    A["Excel dataset: 60 wards, 522 weeks"] --> B["features.py: rain lags 1-6 wk, rolling sums, temp and humidity lags, season"]
+    B --> C["Target: cases in weeks t+2 to t+4"]
+    C --> D["Purged chronological split"]
+    D --> E["train.py: LightGBM Poisson model"]
+    E --> F["models/model.joblib and thresholds.json"]
+    F --> G["predict.py: tier and driver groups"]
+    G --> H["app.py: Streamlit dashboard"]
 ```
 
 - Raw data is loaded once and sorted by ward and date.
