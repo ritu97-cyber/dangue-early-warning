@@ -1,0 +1,50 @@
+{
+  "best_iteration": 400,
+  "val": {
+    "mae": 2.791117370088441,
+    "baseline_mae": 11.632854284369113,
+    "macro_f1": 0.7358773019729636
+  },
+  "top_features": [
+    [
+      "rain_sum2w",
+      0.5559
+    ],
+    [
+      "week_cos",
+      0.1283
+    ],
+    [
+      "hum_mean4w",
+      0.0938
+    ],
+    [
+      "rainfall_mm",
+      0.0773
+    ],
+    [
+      "week_sin",
+      0.033
+    ],
+    [
+      "water_logging_risk_index",
+      0.0244
+    ],
+    [
+      "rain_sum8w",
+      0.0213
+    ],
+    [
+      "rain_sum4w",
+      0.0182
+    ],
+    [
+      "temp_mean4w",
+      0.0119
+    ],
+    [
+      "relative_humidity_pct",
+      0.0086
+    ]
+  ]
+}
