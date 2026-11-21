@@ -5,7 +5,7 @@ Predict dengue risk (Low / Medium / High / Critical) for each ward, 2 to 4 weeks
 
 ## 2. Data flow
 
-```mermaid
+
 ```mermaid
 flowchart LR
     A["Excel dataset: 60 wards, 522 weeks"] --> B["features.py: rain lags 1-6 wk, rolling sums, temp and humidity lags, season"]
