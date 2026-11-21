@@ -40,3 +40,18 @@ The target for week t looks 4 weeks ahead (cases in t+2 to t+4). So the last 4 w
 ## 5. Risk tiers
 - True tiers use training-target percentiles (70, 90, 97): Low, Medium, High, Critical.
 - Predicted-case cut-offs (6.62, 21.17, 34.49) were tuned on **validation only**, never on test data.
+
+
+
+## 6. Cost and speed controls
+- **No external API and no LLM at run time**, so there is no API or token cost.
+- The model is serialized with `joblib`. One prediction takes about 33 ms.
+- The dashboard loads the model and data once with `st.cache_resource`. Predictions and rankings are cached with `st.cache_data`, so the same ward and date is never recomputed.
+- The ranking of all 60 wards uses one batch model call, not 60 calls.
+- Training happens offline. The app never retrains.
+- AI assistant (Claude) was used only during development, with short focused prompts. It is not part of the running system.
+
+## 7. Test results and limitations
+- Test (2024 to 2025): MAE 2.31 (always-guess-the-average: 8.92), RMSE 4.40, exact tier correct 83%, within one tier 98.9%.
+- **Limitation:** Critical precision is 13.7%, so there are many false alarms. The cut-offs were tuned on 2023, a high-dengue year, while 2024 to 2025 had fewer cases. We did not retune on test data.
+- **Next steps (Phase 2):** rolling multi-year validation for the cut-offs, forecast confidence intervals, and a ward heatmap.
