@@ -81,3 +81,34 @@ right.caption("Rain takes about 2 to 4 weeks to turn into hospital cases.")
 st.subheader(f"Highest-risk wards for week of {res['date_used']}")
 rank = get_ranking(res["date_used"]).sort_values("predicted_cases", ascending=False).head(10)
 st.dataframe(rank[["ward_id", "city", "tier", "predicted_cases"]], hide_index=True)
+import json
+
+TIER_NAMES = ["Low", "Medium", "High", "Critical"]
+
+
+@st.cache_data
+def get_test_metrics():
+    path = Path(__file__).parent / "models" / "metrics.json"
+    return json.loads(path.read_text())["test"]
+
+
+st.divider()
+st.subheader("Model error on unseen test data (2024 to 2025)")
+m = get_test_metrics()
+e1, e2, e3, e4 = st.columns(4)
+e1.metric("MAE (cases per window)", round(m["mae"], 2), f"baseline {m['baseline_mae']:.2f}", delta_color="off")
+e2.metric("RMSE (cases per window)", round(m["rmse"], 2))
+e3.metric("Macro-F1 (tiers)", round(m["macro_f1"], 2))
+e4.metric("Critical precision", f"{m['critical_precision'] * 100:.0f}%")
+
+cm = pd.DataFrame(m["confusion_matrix"], index=TIER_NAMES, columns=TIER_NAMES)
+fig3 = px.imshow(
+    cm, text_auto=True, color_continuous_scale="Blues",
+    labels={"x": "Predicted tier", "y": "Actual tier", "color": "Rows"},
+)
+fig3.update_layout(height=380)
+st.plotly_chart(fig3)
+st.caption(
+    "Test data was used once, after thresholds were fixed on validation. "
+    "Critical alerts have many false alarms: cut-offs were tuned on 2023, a high-dengue year."
+)
